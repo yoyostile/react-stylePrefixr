@@ -33,7 +33,18 @@ var properties = [
   'animationTimingFunction',
   'animationPlayState',
   'animationFillMode',
-  'appearance'
+  'appearance',
+  'flexDirection',
+  'justifyContent',
+  'flexWrap',
+  'alignItems',
+  'alignContent',
+  'flexBasis',
+  'flexGrow',
+  'flexShrink',
+  'order',
+  'alignSelf',
+  'flex'
 ];
 
 function GetVendorPrefix(property) {
@@ -67,6 +78,9 @@ module.exports = (function(){
     for(var key in obj){
       if(cache[key] === undefined){
         cache[key] = GetVendorPrefix(key);
+      }
+      if(obj[key] == 'flex') {
+        obj[key] = '-webkit-flex'
       }
       result[cache[key]] = obj[key];
     }
