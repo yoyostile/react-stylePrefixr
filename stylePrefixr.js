@@ -43,7 +43,10 @@ var properties = [
   'flexGrow',
   'flexShrink',
   'order',
-  'alignSelf',
+  'alignSelf'
+];
+
+var values = [
   'flex'
 ];
 
@@ -53,7 +56,21 @@ function GetVendorPrefix(property) {
   }
 
   property = property[0].toUpperCase() + property.slice(1);
+  return prefixes[0] + property
+}
+
+function GetVendorValue(value) {
+  if(values.indexOf(value) == -1) {
+    return value;
+  }
+
+  return '-' + prefixes[0].toLowerCase() + '-' + value;
+}
+
+function CheckBrowser() {
   var temp;
+  var property = properties[0];
+  property = property[0].toUpperCase() + property.slice(1);
 
   for(var i = 0; i < prefixes.length; i++){
     temp = prefixes[i] + property;
@@ -62,9 +79,7 @@ function GetVendorPrefix(property) {
       return temp;
     }
   }
-  return property[0].toLowerCase() + property.slice(1);
 }
-
 
 module.exports = (function(){
   var cache = {};
@@ -74,13 +89,12 @@ module.exports = (function(){
     }
 
     var result = {};
+    CheckBrowser();
 
     for(var key in obj){
       if(cache[key] === undefined){
         cache[key] = GetVendorPrefix(key);
-      }
-      if(obj[key] == 'flex') {
-        obj[key] = '-webkit-flex'
+        obj[key] = GetVendorValue(obj[key]);
       }
       result[cache[key]] = obj[key];
     }
